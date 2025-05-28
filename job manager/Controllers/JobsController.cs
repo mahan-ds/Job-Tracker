@@ -1,5 +1,6 @@
 ﻿using job_manager.Data;
 using job_manager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace job_manager.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult getAll()
         {
@@ -25,6 +27,11 @@ namespace job_manager.Controllers
         [HttpPost]
         public IActionResult createJob(Job job)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             job.CreatedAt = DateTime.UtcNow;
             _context.Jobs.Add(job);
             _context.SaveChanges();

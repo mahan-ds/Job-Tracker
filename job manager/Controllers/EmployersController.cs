@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using job_manager.Data;
 using job_manager.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobTrackerAPI.Controllers;
 
@@ -18,7 +19,7 @@ public class EmployersController : ControllerBase
     [HttpGet]
     public IActionResult GetEmployers()
     {
-        var employers = _context.Employers.ToList();
+        var employers = _context.Employers.Include(e => e.Jobs).ToList();
         return Ok(employers);
     }
 
